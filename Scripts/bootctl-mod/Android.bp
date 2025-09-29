@@ -1,0 +1,35 @@
+// Este arquivo de compilação (Blueprint) define como construir seu binário.
+
+cc_binary {
+    // 1. O nome do módulo (o nome do seu executável)
+    name: "bootctl_mod",
+
+    // 2. Localização do seu código-fonte C++
+    srcs: [
+        "bootctl_mod.cpp",
+    ],
+
+    // 3. Flags de compilação (necessárias para C++17 e AOSP)
+    cflags: [
+        "-Wall",
+        "-Werror",
+    ],
+
+    // 4. Dependências de HIDL/HAL (As bibliotecas que você precisa)
+    // Usamos 'static_libs' para incorporar o código e garantir a portabilidade.
+    static_libs: [
+        // A biblioteca principal que você acessa:
+        "android.hardware.boot@1.0",
+        // Outras bibliotecas para o seu binário ser autônomo (como Magisk faz):
+        "libhidlbase", // Base para todos os serviços HIDL
+        "libutils",    // Utilitários gerais do Android
+        "libcutils",   // Utilitários C (mais antigos, mas essenciais)
+        "liblog",      // Para mensagens de erro e log
+    ],
+
+    // 5. Configuração do instalador no sistema Android
+    installable: true,
+    // Instala o binário em /system/bin/ (o caminho padrão para executáveis)
+    // Você pode mudar isso se for injetar em outro lugar.
+    relative_install_path: "bin",
+}
