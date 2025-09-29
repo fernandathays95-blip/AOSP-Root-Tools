@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AOSP ROOT MONITOR"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="32dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Slot de Boot Ativo:"
+        android:textSize="18sp"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/text_boot_slot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="A"
+        android:textSize="36sp"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textStyle="italic"
+        android:layout_marginBottom="48dp" />
+
+    <Button
+        android:id="@+id/button_switch_slot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Alternar para o Slot Inativo (Requer Root)"
+        android:padding="12dp"/>
+
+    <TextView
+        android:id="@+id/text_log"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textSize="12sp"
+        android:text="Log: Aguardando comandos..." />
+
+</LinearLayout>
