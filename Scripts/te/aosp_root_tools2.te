@@ -1,0 +1,48 @@
+# Este arquivo define a politica SELinux para o dominio (processo)
+# do seu binário 'bootctl_mod' e seu script de serviço.
+
+# 1. Definição do Domínio
+# Define o novo domínio de segurança para seu módulo.
+type aosp_root_tools_t, domain;
+type aosp_root_tools_exec, file_type, exec_type;
+
+# Permite que o processo init (ou Magisk) execute seu binário.
+allow init aosp_root_tools_exec:file { entrypoint read };
+# Permite que seu dominio herde do dominio 'init'
+# (Crucial se estiver rodando como um serviço de inicialização).
+allow aosp_root_tools_t self:process { transition };
+
+# 2. Permissões de Sistema de Arquivos (Montagem/Acesso a Binários)
+# Permite ao seu domínio executar binários do sistema.
+allow aosp_root_tools_t system_file:file execute_no_trans;
+# Permite ler as propriedades do sistema (ex: ro.boot.slot_a).
+allow aosp_root_tools_t property_type:property_service { get };
+
+# 3. Permissões de Binder (Interação com ServiceManager e Serviços HAL)
+# Permite ao seu domínio comunicar-se via Binder (chamar serviços).
+allow aosp_root_tools_t binder_device:chr_file { read write ioctl };
+
+# Permite que o seu domínio procure (find) e chame (call) serviços.
+# Isso permite que ele encontre o HAL de Boot e o vold.
+allow aosp_root_tools_t servicemanager:binder call;
+allow aosp_root_tools_t hwservicemanager:binder call;
+
+# Permite ao seu dominio interagir com o HAL de Boot.
+# Substitua 'boot_hal_service' pelo contexto real do HAL de Boot (ex: hal_boot_default).
+allow aosp_root_tools_t boot_hal_service:hwservice_manager find; 
+
+# 4. Permissões de Volume (Interação com o VOLD e Partições)
+# Esta é a parte de maior risco e mais específica:
+
+# Permite ao seu domínio interagir com o vold (para manipulacao de volume logico/Particao Super).
+allow aosp_root_tools_t vold:binder call; 
+
+# Permite ao seu domínio acesso de leitura/escrita ao bloco de dispositivo de partição.
+# **ATENÇÃO:** Esta permissão é ampla e deve ser restrita se possível.
+# Ela permite manipular diretamente as partições no disco.
+allow aosp_root_tools_t block_device:dir search;
+allow aosp_root_tools_t platform_app_data_file:dir { search write add_name };
+
+# Permite manipulacao do dispositivo de volume logico
+allow aosp_root_tools_t vold_data_file:dir { read write add_name };
+allow aosp_root_tools_t vold_device:dir { read write open };
