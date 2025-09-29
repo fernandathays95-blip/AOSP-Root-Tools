@@ -1,0 +1,27 @@
+// Define um serviço que será executado pelo processo init.
+
+service aosp_boot_service /system/bin/bootctl_mod
+    // 'user root' e 'group root' garantem que o binário rode com as permissões mais altas.
+    user root
+    group root system
+
+    // Define o contexto de segurança (SELinux) para o serviço.
+    // Isso é crucial para que o binário tenha acesso às partes restritas do sistema.
+    // O nome "u:r:aosp_root_tools:s0" é um contexto SELinux que você teria que definir em outro lugar.
+    seclabel u:r:aosp_root_tools:s0
+
+    // O critério para iniciar o serviço:
+    // 'oneshot' significa que ele roda uma vez e termina.
+    // Se o binário for um serviço contínuo, você usaria 'class core' ou 'on property'.
+    oneshot
+
+    // Comando a ser executado quando o serviço inicia.
+    // 'setprop' é opcional, mas útil para marcar que seu serviço foi iniciado.
+    on start
+        exec -- /system/bin/bootctl_mod check
+        setprop vendor.aosp_root_tools.status "running"
+
+// Uma ação para iniciar o seu serviço logo após as propriedades básicas do sistema serem carregadas.
+// A trigger 'early-fs' é um momento seguro para rodar binários de baixo nível.
+on early-fs
+    start aosp_boot_service
