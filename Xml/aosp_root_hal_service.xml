@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service-context>
+
+    <hal-service name="android.hardware.boot" version="1.0">
+        <interface name="IBoot">
+            <instance name="default_mod" />
+        </interface>
+    </hal-service>
+
+    <permission name="android.permission.ACCESS_PRIVATE_STORAGE">
+        <group gid="sdcard_rw" />
+    </permission>
+
+    <selinux-context name="u:object_r:aosp_root_tools_exec:s0" file="/system/bin/bootctl_mod" />
+
+</service-context>
