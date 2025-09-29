@@ -1,0 +1,14 @@
+# Metadados Essenciais (YAML-like syntax)
+
+id=AOSP_ROOT_TOOLS      # ID exclusivo do seu módulo. Usamos o nome do seu projeto.
+name=AOSP Root Tools Mod # Nome amigável que aparece no Magisk Manager.
+version=v1.0-BootControl # Versão atual do seu módulo.
+versionCode=10           # Código de versão para atualizações (sempre um número inteiro).
+author=Seu Nome/Grupo    # Seu nome ou o nome do seu grupo de desenvolvimento.
+description=Ferramentas de baixo nível para controle de boot e acesso Root. Inclui binários customizados.
+
+# Requisitos do Sistema (Opcional)
+
+minMagisk=24000          # Versão mínima do Magisk necessária (ex: 24.0).
+# minAPI=29              # Versão mínima da API do Android (29 = Android 10).
+# maxAPI=34              # Versão máxima da API do Android (34 = Android 14).
