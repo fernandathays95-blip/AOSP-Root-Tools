@@ -1,0 +1,11 @@
+{
+  "project_name": "AOSP Root Tools Monitor",
+  "api_min_supported": 29,
+  "api_max_supported": 34,
+  "module_id_expected": "AOSP_ROOT_TOOLS",
+  "bootctl_binary_path": "/system/bin/bootctl_mod",
+  "root_check": {
+    "su_min_version": 26000,
+    "warning_message": "O módulo Magisk não está instalado ou desatualizado."
+  }
+}
