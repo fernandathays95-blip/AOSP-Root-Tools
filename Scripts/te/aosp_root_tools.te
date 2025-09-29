@@ -1,0 +1,35 @@
+// 1. Definição do Tipo (Type Definition)
+// Define o domínio de segurança para o seu serviço, que é o processo em execução.
+
+type aosp_root_tools, domain;
+type aosp_root_tools_exec, file_type, exec_type;
+
+// 2. Inclusão no Domínio de Serviço do Sistema
+// Permite que seu serviço interaja com o sistema init (o processo que o inicia).
+// O 'hal_default' permite que ele interaja com as interfaces HAL.
+
+permissive aosp_root_tools; // Torna o domínio permissivo para facilitar o teste (CUIDADO!).
+
+# Permite que o processo seja iniciado pelo init
+init_daemon_domain(aosp_root_tools)
+hal_server_domain(aosp_root_tools, hal_default)
+
+
+// 3. Permissões Essenciais de Root/Boot
+// A chave para o seu binário bootctl_mod funcionar.
+
+// Permite ler e escrever em dispositivos de bloco (partições)
+allow aosp_root_tools self:capability { sys_resource };
+allow aosp_root_tools rootfs:file { getattr open read };
+allow aosp_root_tools block_device:dir search;
+allow aosp_root_tools block_device:blk_file { read write open ioctl };
+
+// Permite que o binário chame a interface de boot que você está usando (HIDL)
+allow aosp_root_tools hal_boot_server:service_manager find;
+
+// Permite interagir com as partições /dev/block que seu bootctl acessa.
+# Esta é uma permissão muito ampla e perigosa, mas necessária para o root.
+allow aosp_root_tools { system_data_file }:file { read write open };
+
+// Permite executar comandos em /system/bin (onde está seu binário)
+allow aosp_root_tools system_file:file { execute_no_trans };
